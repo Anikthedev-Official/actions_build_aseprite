@@ -11,38 +11,6 @@ on:
           default: 'YES!'
 
 jobs:
-  build-win:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v6
-    - uses: seanmiddleditch/gha-setup-ninja@master
-    - name: Clone aseprite source
-      run: |
-        git clone --recursive https://github.com/aseprite/aseprite.git aseprite
-    - name: Find path
-      id: path
-      run: echo "working_path=$(pwd | findstr \)" >> "$GITHUB_OUTPUT"
-    - name: Setup MSVC Developer Command Prompt
-      uses: TheMrMilchmann/setup-msvc-dev@v4.0.0
-      with:
-        arch: x64
-    - name: Compiling aseprite for Windows
-      run: |
-        cd aseprite
-        Get-Content ../input.txt | .\build.cmd
-    - name: Archive bin
-      run: |
-        cd D:\a\actions_build_aseprite\actions_build_aseprite\builds\aseprite-release\bin
-        rm gen*
-        rm mod*
-        7z -tzip a Aseprite-win-x64.zip * -mx0 | findstr ing
-        cd ..\..\..
-        mv builds\aseprite-release\bin\Aseprite-win-x64.zip .
-    - name: Upload Windows artifact
-      uses: actions/upload-artifact@v7.0.0
-      with:
-        name: windows
-        path: Aseprite-win-x64.zip
 
   build-linux:
     runs-on:  ubuntu-24.04
